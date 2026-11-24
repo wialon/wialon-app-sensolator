@@ -32,7 +32,6 @@ function GenerateSVG (_options) {
                 presice = presice || 4;
                 return +(val).toFixed(presice);
             },
-            //
             ticks: 100
         };
         // merge
@@ -58,7 +57,6 @@ function GenerateSVG (_options) {
                 labelRadius = 79;
                 labelX = 70;
                 labelY = 60;
-                //transform-origin="97 97"
                 background = '<path fill="' + bgColor + '" d="M 98 98 L 98 2 A 95 95 0 0 0 2 98 L 97 98"></path>';
                 foreground = '<path fill="' + bgColor + '" d="M 98 98 L 98 28 A 70 70 0 0 0 28 98 L 98 98"></path>';
                 arrow += 'd="M97 98.5 A1.5 1.5 0 0 0 97 95.5 L 20 96.6 A0.4 0.4 0 0 0 20 97.6 Z"></path>';
@@ -94,7 +92,6 @@ function GenerateSVG (_options) {
         self.element.setAttributeNS(null, 'height', '190');
         self.element.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         self.element.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-        // self.element.setAttribute('xmlns:ev', 'http://www.w3.org/2001/xml-events');
         self.element.setAttribute('xml:space', 'preserve');
         self.element.setAttributeNS(null, 'class', 'indicator-body');
 
@@ -324,7 +321,6 @@ function GenerateSVG (_options) {
 
             arrow.attr('transform', 'rotate(' + deg + ', ' + cx + ', ' + cy + ')');
 
-            // $(self.wrapper).find('.arrow')[0].setAttributeNS(null, 'transform', 'rotate(' + deg + ', ' + cx  + ', ' + cy + ')');
             $(self.wrapper).find('.sensor-val').text(self.options.formatter(val, 2) + (self.options.units ? ' ' + self.options.units : ''));
         }
     }
@@ -428,7 +424,7 @@ function lzw_decode(s) {
 
 /**
  * Format number based on interval "from" - "to"; working from abs values from 0 to 1e27 enough good
- * @author Vitaly Makarevich
+ * @author Gurtam
  * @param  {number} number       number to format
  * @param  {?int} maxChars
  * @return {string} formatted number
@@ -536,7 +532,6 @@ function is_valid_text(text, allowSpecial) {
 	if (text === 'null')
 		return false;
 	var value = '' + text;
-	//var regexp = /([\'\"\{\}\\])/gi;
 	var regexp = /([\"\{\}\\])/i;
 	return (value !== null && typeof value === 'string' && (!value.length || (allowSpecial || !regexp.test(value))));
 }
@@ -1020,7 +1015,6 @@ ko.bindingHandlers.valueString = {
 		var handleBinding = function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 			var
 				$element = $(element),
-				// $parent = $element.parent(),
 				params = valueAccessor(),
 				initValue = ko.unwrap(params.data);
 
@@ -1228,8 +1222,6 @@ var sensolator = (function(app){
 			$rgraph = $e.closest('.rgraph'),
 			$graph_container = $rgraph.find('.graph-container');
 
-		// console.log( $rgraph.width() - parseInt( $rgraph.find('.graph-container').css('margin-left'), 10 ) );
-
 		graph.configure({
 			width: $rgraph.width() - parseInt($graph_container.css('padding-left'), 10) - parseInt($graph_container.css('padding-right'), 10),
 			height: $rgraph.height() - parseInt($graph_container.css('padding-top'), 10) - parseInt($graph_container.css('padding-bottom'), 10)
@@ -1276,9 +1268,9 @@ var sensolator = (function(app){
 
 /**
  * Sensolator Core Module
- * @author Vitaly Makarevich
+ * @author Gurtam
  * @copyright 2002-2014 Gurtam
- * @license http://www.gnu.org/licenses/lgpl.html LGPL
+ * @license https://opensource.org/licenses/MIT MIT
  */
 var sensolator = (function(app){
 	'use strict';
@@ -1290,7 +1282,6 @@ var sensolator = (function(app){
 	// ****************************
 	// Private Properties & Methods
 	// ****************************
-	var branch = $.url().param('b') || 'master';
 	var
 		/**
 		 * wialon.js URL trailing part
@@ -1305,14 +1296,14 @@ var sensolator = (function(app){
 		 * @private
 		 * @type {string}
 		 */
-		baseURL_ = $.url().param('vima') ? 'http://diha.dev.gurtam.net:8012' : ($.url().param('baseUrl') || $.url().param('hostUrl') || (branch=='develop'?'https://dev-api.wialon.com':'https://hst-api.wialon.com')),
+		baseURL_ = $.url().param('baseUrl') || $.url().param('hostUrl') || 'https://hst-api.wialon.com',
 
 		/**
 		 * Wialon user name
 		 * @private
 		 * @type {string}
 		 */
-		user_ = $.url().param('vima') ? 'wialon' : $.url().param('user') || '',
+		user_ = $.url().param('user') || '',
 
 
 		/**
@@ -1327,7 +1318,7 @@ var sensolator = (function(app){
 		 * @private
 		 * @type {string}
 		 */
-		password_ = $.url().param('vima') ? '' : ($.url().param('password') || ''),
+		password_ = $.url().param('password') || '',
 
 		/**
 		 * Wialon session id
@@ -1359,7 +1350,7 @@ var sensolator = (function(app){
 						// 1) Test new fileServer
 						self.__engines.fileServer.test(function(errorCode) {
 							if (errorCode) {
-								// 2) Test old fileServer; TODO: remove it after old fileServer API removed
+								// 2) Test old fileServer
 								self.__engines.fileServerOld.test(function(errorCode) {
 									if (errorCode) {
 										self.__engine = 'customProp';
@@ -1396,7 +1387,7 @@ var sensolator = (function(app){
 							app.user.currentUser.updateCustomProperty(this.__propName, '', callback);
 						}
 					},
-					fileServerOld: { // Legacy support, TODO: remove it after old API removed
+					fileServerOld: { // Legacy support
 						__readData: null,
 						__flags: 0, // flags used to read/write/delete files: 0 - protected, 1 - public
 						__path: {
@@ -1419,7 +1410,7 @@ var sensolator = (function(app){
 											customPropJSON,
 											function writeFileCallback(errorCode) {
 												if (errorCode) {
-													// when write to fileServer an error occured
+													// when write to fileServer an error occurred
 													app.core.callCallback(callback, [errorCode]);
 												}
 												else {
@@ -1475,7 +1466,7 @@ var sensolator = (function(app){
 																						app.core.callCallback(callback, [errorCode]);
 																					}
 																					else {
-																						// create samle data
+																						// create sample data
 																						self.write('false', function testWriteCallback() {
 																							// now write && read && remove tested and Ok
 																							app.core.callCallback(callback, [0]);
@@ -1515,7 +1506,7 @@ var sensolator = (function(app){
 									self.__flags,
 									function readFileCallback(errorCode, data){
 										if (errorCode) {
-											// if error occured back to customProp engine
+											// if error occurred back to customProp engine
 											serialize_.storage.__engine = 'customProp';
 											serialize_.storage.doAction('read', callback);
 										}
@@ -1537,7 +1528,7 @@ var sensolator = (function(app){
 								data,
 								function writeFileCallback(errorCode) {
 									if (errorCode) {
-										// if error occured back to customProp engine
+										// if error occurred back to customProp engine
 										serialize_.storage.__engine = 'customProp';
 										serialize_.storage.doAction('write', data, callback);
 									}
@@ -1587,7 +1578,7 @@ var sensolator = (function(app){
 											0, // contentType (0 = plainText)
 											function writeFileCallback(errorCode) { // callback
 												if (errorCode) {
-													// when write to fileServer an error occured
+													// when write to fileServer an error occurred
 													app.core.callCallback(callback, [errorCode]);
 												}
 												else {
@@ -1646,7 +1637,7 @@ var sensolator = (function(app){
 																						app.core.callCallback(callback, [errorCode]);
 																					}
 																					else {
-																						// create samle data
+																						// create sample data
 																						self.write('false', function testWriteCallback() {
 																							// now write && read && remove tested and Ok
 																							app.core.callCallback(callback, [0]);
@@ -1687,7 +1678,7 @@ var sensolator = (function(app){
 									0, // contentType (0 = plainText)
 									function readFileCallback(errorCode, data){ // callback
 										if (errorCode) {
-											// if error occured back to customProp engine
+											// if error occurred back to customProp engine
 											serialize_.storage.__engine = 'customProp';
 											serialize_.storage.doAction('read', callback);
 										}
@@ -1711,7 +1702,7 @@ var sensolator = (function(app){
 								0, // contentType (0 = plainText)
 								function writeFileCallback(errorCode) { // callback
 									if (errorCode) {
-										// if error occured back to customProp engine
+										// if error occurred back to customProp engine
 										serialize_.storage.__engine = 'customProp';
 										serialize_.storage.doAction('write', data, callback);
 									}
@@ -2158,8 +2149,9 @@ var sensolator = (function(app){
 				return false;
 			}
 
+			app.wialon.core.Remote.getInstance().remoteCall('core/set_session_property', { prop_name:'skip_nonactive_items', prop_value:1 }, function () {});
+
 			// Unit additional mixins
-			// TODO: add accessFlag check
 			s.loadLibrary('itemIcon');
 			s.loadLibrary('unitSensors');
 			s.loadLibrary('itemCustomFields');
@@ -2167,7 +2159,6 @@ var sensolator = (function(app){
 			s.loadLibrary('resourceNotifications');
 			s.loadLibrary("unitCommandDefinitions");
 			s.loadLibrary('unitEventRegistrar');
-			// s.loadLibrary('userNotifications');
 
 			spec = [
 				{
@@ -2441,11 +2432,6 @@ var sensolator = (function(app){
 
 				wialonLoadSession_();
 			});
-
-			// allow dragging bootstrap modals
-			// $('.modal').draggable({
-			//     handle: '.modal-header'
-			// });
 		});
 	};
 
@@ -2493,7 +2479,6 @@ var sensolator = (function(app){
 	 */
 	app.core.errorMessage = function errorMessage(code, message) {
 		if (app.core.display_errors) {
-			// alert((code ? app.lang.error + ': #' + code + ' ' : '') + message);
 			alert(message);
 			return;
 		}
@@ -2626,7 +2611,7 @@ var sensolator = (function(app){
 	// Current user app settings
 	app.user.settings = {
 		notifications: {
-			email: ko.observable(''), // .subscribe( app.core.appStateSave ).target
+			email: ko.observable(''),
 			phone: ko.observable('')
 		}
 	};
@@ -2690,8 +2675,6 @@ var sensolator = (function(app){
 		$c_.user_settings_modal.on('shown.bs.modal', function () {
 			var
 				el = app.$(this).find('input:text:visible:first')[0];
-
-			// app.$(this).find('input:text:visible:first').focus();
 
 			el.selectionStart = el.selectionEnd = el.value.length;
 		});
@@ -2956,7 +2939,6 @@ var sensolator = (function(app){
 
 			if ( _mapsHandlers.length ) {
 				var preventDef = false;
-				// for(var i=0; i < _mapsHandlers.length; i++){
 				while(_mapsHandlers.length){
 					var handler = _mapsHandlers.shift();
 					if(!handler(curr_coord))
@@ -2983,7 +2965,6 @@ var sensolator = (function(app){
 	app.map.addHandlerDbClickToMap = function(handler){
 		if(typeof handler === 'function'){
 			_mapsHandlers.push(handler);
-			// map_.on('click', handler);
 		}
 	};
 	/**
@@ -3037,16 +3018,10 @@ var sensolator = (function(app){
 			    iconSize: [32, 32],
 			    iconAnchor: [16, 16],
 			    popupAnchor: [60, -100]
-			    // labelAnchor: [-48, 32]
-			    // shadowUrl: 'my-icon-shadow.png',
-			    // shadowRetinaUrl: 'my-icon-shadow@2x.png',
-			    // shadowSize: [48, 48],
-			    // shadowAnchor: [32, 32]
 			});
 
 
 			if (!pos) {
-				// app.core.errorMessage(null, app.lang.errors.cant_get_unit_pos);
 				return false;
 			}
 
@@ -3085,14 +3060,13 @@ var sensolator = (function(app){
 
 	/**
 	 * Set map view to wialon unit, see leaflet docs for difference between setView and panTo
-	 * @param {[type]} unit [d
+	 * @param {object} unit wialon unit object
 	 */
 	app.map.setViewToUnit = function setViewToUnit(unit) {
 		var
 			pos = unit.getPosition();
 
 		if (!pos) {
-			// app.core.errorMessage(null, app.lang.errors.cant_get_unit_pos);
 			return false;
 		}
 		else {
@@ -3109,7 +3083,6 @@ var sensolator = (function(app){
 			pos = unit.getPosition();
 
 		if (!pos) {
-			// app.core.errorMessage(null, app.lang.errors.cant_get_unit_pos);
 			return false;
 		}
 		else {
@@ -3182,7 +3155,7 @@ var sensolator = (function(app){
 	return app;
 })(sensolator || {});
 
-// Units module
+// Sensolator history module
 var sensolator = (function(app){
 	'use strict';
 
@@ -3228,7 +3201,6 @@ var sensolator = (function(app){
 					item = s.getItem(historyObj.uId);
 
 				if ( !app._.contains( app.reports.units_list, item ) || !app.reports.resources || !app.reports.resources.length) {
-					//app.core.errorMessage(7, app.lang.errors.performing_request);
 					return;
 				}
 
@@ -3258,7 +3230,7 @@ var sensolator = (function(app){
 					results = [],
 					_checkCallback = function() {
 						if ( _loaded ) {
-							// // Add data messages
+							// Add data messages
 							for (var i = 0, mLength = results.length; i < mLength; i++) {
 								// check for invalid value
 								if (results[i][1] === -348201.39) {
@@ -3308,7 +3280,7 @@ var sensolator = (function(app){
 											for (i = 0, l = mnmRes.length; i < l; i++) {
 												match = mnmRes[i].et.match(reg);
 												if (match) {
-													// HACK: fetch number value & round it
+													// fetch number value & round it
 													t = match[1].match(/^([0-9]+\.?[0-9]*)\s?(.*)/);
 													if (t) {
 														t[1] = Number(t[1]).toFixed(app.core.DEFAULT_FIXED_TO);
@@ -3435,7 +3407,7 @@ var sensolator = (function(app){
 		SensorHistoryClass.prototype.timeFrom = undefined;
 		SensorHistoryClass.prototype.timeTo = undefined;
 		SensorHistoryClass.prototype.data = [];
-		SensorHistoryClass.prototype.eViolations = {}; // event violations object by time, catched from unit
+		SensorHistoryClass.prototype.eViolations = {}; // event violations object by time, caught from unit
 		SensorHistoryClass.prototype.eViolationsArr = [];
 
 		SensorHistoryClass.prototype.addItem = function(sensorValue, time) {
@@ -3503,51 +3475,10 @@ var sensolator = (function(app){
 				// Remove first element
 				this.data.shift();
 			}
-			// TODO: delete this & add check for today
-			// this.shiftToTimeFrom( getPeriodInterval_(this.period).timeFrom );
 		};
-
-		/**
-		 * Shift old unneccessary data to timeFrom
-		 * @param  {unixtime} timeFrom the time to shift old data to, not including
-		 * @return {boolean}  true on shifted items or this.timeFrom ==== timeFrom, false on timeFrom is less than this.timeFrom
-		 */
-		// TODO: DELETE it when definitely not needed
-		// SensorHistoryClass.prototype.shiftToTimeFrom = function(timeFrom) {
-		//  timeFrom = parseInt(timeFrom);
-
-		//  var
-		//      i,
-		//      dataLength = this.data.length,
-		//      res = false;
-
-		//  if (timeFrom >= this.timeFrom) {
-		//      for (i = 0; i < dataLength && timeFrom > this.data[i].time; i++) {};
-		//      --i;
-		//      if (i >= 0) {
-		//          this.data.splice(0, i+1);
-		//          if (this.data.length) {
-		//              this.timeFrom = this.data[0].time;
-		//          }
-		//          else {
-		//              this.timeFrom = undefined;
-		//              this.timeTo = undefined;
-		//          }
-		//      }
-
-		//      res = true;
-		//  }
-
-		//  return res;
-		// };
 
 		SensorHistoryClass.prototype.changePeriod = function changePeriod(period, onChangePeriod, onLoadData) {
 			this.periodOffset = 0;
-
-			// if (this.period === period) {
-			//  // app.core.callCallback(callback);
-			//  return;
-			// }
 
 			var
 				interval = getPeriodInterval_(period);
@@ -3556,19 +3487,10 @@ var sensolator = (function(app){
 
 			app.core.callCallback(onChangePeriod);
 
-			// TODO: delete shiftToTimeFrom
-			// if ( this.shiftToTimeFrom(interval.timeFrom) ) {
-			//  app.core.callCallback(onLoadData);
-			//  return;
-			// }
-
 			// If the user has access to messageLoader.loadInterval
 			if ( app.wialon.util.Number.and(app.user.currentUser.getUserAccess(), app.wialon.item.Item.accessFlag.execReports) || app.debug) {
 				loadMessages_(this, interval, onLoadData);
 			}
-			// else {
-			//  app.core.callCallback(onLoadData);
-			// }
 		};
 
 		SensorHistoryClass.prototype.periodOffsetPlus = function periodOffsetPlus(onChangePeriod, onLoadData) {
@@ -3811,7 +3733,7 @@ var sensolator = (function(app){
 
 	app.notifications = app.notifications || {};
 
-	// Public constants used in private properties o_O)
+	// Public constants used in private properties
 	app.notifications.NOTIFICATION_TEXT_DELIMITER = '~';
 
 	// ****************************
@@ -3825,13 +3747,13 @@ var sensolator = (function(app){
 
 		pendingCachingElements_ = {
 			desktop_notifications: '#desktop-notifications',
-			desktop_notifications_table: '#desktop-notifications-table', // TODO: add holder and cache it via $
+			desktop_notifications_table: '#desktop-notifications-table',
 		},
 
 		// Cached DOM elements, initialized from pendingCachingElements_ in units.initDOM()
 		$c_ = {},
 
-		/* 0 - уведомление срабатывает на первое сообщение, 1 - уведомление срабатывает на каждое сообщение, 2 - уведомление выключено */
+		/* 0 - notification fires on the first message, 1 - notification fires on every message, 2 - notification is disabled */
 		NOTIFICATION_ON_STATE_ = 0,
 		NOTIFICATION_OFF_STATE_ = 2,
 
@@ -3847,30 +3769,28 @@ var sensolator = (function(app){
 		notification_update_allow_ = false,
 
 		notification_create_options_ = {
-			// id: 0, /* ID уведомления */
 			// need to fill in with computed name
-			n: '', /* название */
+			n: '', /* name */
 			txt: '%SENSOR_NAME%' + app.notifications.NOTIFICATION_TEXT_DELIMITER + '%SENSOR_VALUE%',
-			ta: 0, /* время активации (UNIX формат) */
-			td: 0, /* время деактивации (UNIX формат) */
-			ma: 0, /* максимальное количество срабатываний (0 - не ограничено) */
-			mmtd: 0, /* максимальный временной интервал между сообщениями (секунд) */
-			cdt: 0, /* таймаут срабатывания(секунд) */
-			mast: 0, /* минимальная продолжительность тревожного состояния (секунд) */
-			mpst: 0, /* минимальная продолжительность предыдущего состояния (секунд) */
-			cp: 0,/* период контроля относительно текущего времени (секунд) */
+			ta: 0, /* activation time (UNIX format) */
+			td: 0, /* deactivation time (UNIX format) */
+			ma: 0, /* maximum number of triggers (0 - unlimited) */
+			mmtd: 0, /* maximum time interval between messages (seconds) */
+			cdt: 0, /* trigger timeout (seconds) */
+			mast: 0, /* minimum duration of the alarm state (seconds) */
+			mpst: 0, /* minimum duration of the previous state (seconds) */
+			cp: 0,/* control period relative to the current time (seconds) */
 			fl: NOTIFICATION_OFF_STATE_,
-			tz: 0, /* часовой пояс */
-			la: 'en', /* язык пользователя (двухбуквенный код) */
-			// ac: 0, /* количество срабатываний */
-			sch: { /* ограничение по времени */
-				f1: 0,	/* время начала интервала 1 */
-				f2: 0,	/* время начала интервала 2 */
-				t1: 0,	/* время окончания интервала 1 */
-				t2: 0,	/* время окончания интервала 2 */
-				m: 0,	/* маска дней месяца */
-				y: 0,	/* маска месяцев */
-				w: 0/* маска дней недели */
+			tz: 0, /* time zone */
+			la: 'en', /* user language (two-letter code) */
+			sch: { /* time limitation */
+				f1: 0,	/* start time of interval 1 */
+				f2: 0,	/* start time of interval 2 */
+				t1: 0,	/* end time of interval 1 */
+				t2: 0,	/* end time of interval 2 */
+				m: 0,	/* mask of days of the month */
+				y: 0,	/* mask of months */
+				w: 0/* mask of days of the week */
 			},
 			un: [], // array of unit IDs to attach to
 			act: [
@@ -3886,7 +3806,7 @@ var sensolator = (function(app){
 				{
 					t: 'event',
 					p: {
-						flags: 1 /* зарегистрировать как: 0 - событие, 1 - нарушение */
+						flags: 1 /* register as: 0 - event, 1 - violation */
 					}
 				}
 			],
@@ -3917,7 +3837,7 @@ var sensolator = (function(app){
 			{
 				t: 'event',
 				p: {
-					flags: 1 /* зарегистрировать как: 0 - событие, 1 - нарушение */
+					flags: 1 /* register as: 0 - event, 1 - violation */
 				}
 			},
 			{
@@ -4021,15 +3941,13 @@ var sensolator = (function(app){
 			// create notification with default settings but not store it to server
 			res = app.$.extend(true, {}, notification_create_options_);
 
-			res.n = NOTIFICATION_NAME_PREFIX_ + '_' + uId + '_' + sId; // + '_' + sName
+			res.n = NOTIFICATION_NAME_PREFIX_ + '_' + uId + '_' + sId;
 			res.act[0].p.name = res.n;
 			res.un.push( uId );
 			res.trg.p.sensor_name_mask = sName;
 			res.la = app.langCode;
 			res.ta = app.wialon.core.Session.getInstance().getServerTime();
-			// res.td = res.ta + 3600*24*7; // One week
 			res.td = res.ta + 631138519; // 20 years
-			// res.tz = app.wialon.util.DateTime.getTimezone();
 
 			app.notifications.listByUIdSName[uId] || (app.notifications.listByUIdSName[uId] = {});
 			app.notifications.listByUIdSName[uId][sName] = res;
@@ -4042,7 +3960,6 @@ var sensolator = (function(app){
 	 * Get full data for notifications, used as callback for resource.getNotificationsData
 	 * @param  {int} code wialon error code
 	 * @param  {array} notifications array of wialon notification objects
-	 * TODO: mb create notification & store its ID to app state
 	 */
 	var getNotificationsDataCallback_ = function getNotificationsDataCallback_(code, notifications) {
 		var
@@ -4055,7 +3972,6 @@ var sensolator = (function(app){
 			nId;
 
 		if (code) {
-			// app.core.errorMessage(code, app.lang.errors.cant_get_notifications_data);
 			return;
 		}
 
@@ -4136,7 +4052,7 @@ var sensolator = (function(app){
 			}
 		}
 
-		// HACK: fetch number value & round it
+		// fetch number value & round it
 		msg.txt = msg.txt.substr(valPos + 1);
 
 		t = msg.txt.match(/^([0-9]+\.?[0-9]*)\s?(.*)/);
@@ -4242,28 +4158,24 @@ var sensolator = (function(app){
 			aoColumns: [
 				{
 					mData: 'uId',
-					// sClass: 'n-uId',
 					mRender: function(data, type, full) {
 						return '<div class="n-uId" id="n-u-' + data + '">' + app.units.listById[data].getName() + '</div>';
 					},
 				},
 				{
 					mData: 'sId',
-					// sClass: 'n-sId',
 					mRender: function(data, type, full) {
 						return '<div class="n-sId" id="n-us-' + app.units.watchSensors[full.uId][data].usId + '">' + app.units.sensorsInfo[full.uId][data].n + '</div>';
 					}
 				},
 				{
 					mData: 'time',
-					// sClass: 'n-time',
 					mRender: function(data, type, full) {
 						return '<div class="n-time">' + app.wialon.util.DateTime.formatTime(data, 2, app.user.currentUserDateTimeFormat) + '</div>';
 					}
 				},
 				{
 					mData: 'val',
-					// sClass: 'n-val',
 					mRender: function(data, type, full) {
 						return '<div class="n-val">' + ((data === app.wialon.item.MUnitSensor.invalidValue) ? app.lang.sensor.invalid_value : data ) + '</div>';
 					}
@@ -4275,19 +4187,6 @@ var sensolator = (function(app){
 
 		// Click on desktop notifications popup cols
 		$c_.desktop_notifications_table
-			// .on(
-			// 	{
-			// 		'click.notification': function(event) {
-			// 			var
-			// 				uId = app.$(this).attr('id').split('-')[2];
-
-			// 			app.units.focusOnUnit( app.units.listById[uId] );
-
-			// 			event.preventDefault();
-			// 		}
-			// 	},
-			// 	'td .n-uId'
-			// )
 			.on(
 				{
 					'click.notification': function(event) {
@@ -4444,13 +4343,12 @@ var sensolator = (function(app){
 			});
 		}
 		else {
-			// app.core.errorMessage(null, app.lang.errors.cant_find_resource_to_store_notifications);
 			app.notifications.canCreate = function(){return false;};
 		}
 	};
 
 	/**
-	 * Update notifications service eft count & email_notification service left count
+	 * Update notifications service left count & email_notification service left count
 	 * @param  {?Function} callback function to run after left count update
 	 */
 	app.notifications.updateLeftCount = function updateLeftCount(callback){
@@ -4539,7 +4437,6 @@ var sensolator = (function(app){
 			app.notifications.observableSettings.allowCreate(true);
 		}
 		else {
-			// app.core.errorMessage(null, 'Cant create notification');
 			app.notifications.observableSettings.allowCreate(false);
 		}
 	};
@@ -4574,7 +4471,6 @@ var sensolator = (function(app){
 
 	/**
 	 * Update notification properties and save them to wialon
-	 * TODO: don't update on FALSE values (for example when wialon not loaded)
 	 */
 	app.notifications.updateNotification = function updateNotification() {
 		var
@@ -4593,7 +4489,6 @@ var sensolator = (function(app){
 		app.$.extend(true, sensorNotificationPrev, sensorNotification);
 
 		if (sensorNotification && notification_update_allow_) {
-			// sensorNotification.act = app.$.extend(true, [], notification_default_actions_, sensorNotification.act || []);
 			sensorNotification.act = app.notifications.mergeActions(sensorNotification.act || []);
 			for (i = 0; i < sensorNotification.act.length; i++) {
 				if (sensorNotification.act[i].t === 'email') {
@@ -4711,7 +4606,6 @@ var sensolator = (function(app){
 			app.notifications.resource.deleteNotification(notificationId);
 		}
 
-		// app.wialon.core.Remote.getInstance().finishBatch(function(code, combinedCode){ // code is zero if no errors. combinedCode is zero if all combined requests where successfully
 		app.wialon.core.Remote.getInstance().finishBatch(callback);
 	};
 
@@ -4846,8 +4740,6 @@ var sensolator = (function(app){
         widgetGeneralDefaults_ = {
             sizex: 12,
             sizey: 12,
-            // row: 1,
-            // col: 4,
             controls: [
                 'delete',
                 'options',
@@ -4976,12 +4868,6 @@ var sensolator = (function(app){
     };
 
     var unitsHolderOverflowFix_ = function unitsHolderOverflowFix_(event){
-        // if ($c_.units_holder[0].scrollHeight > $c_.units_holder[0].clientHeight) {
-        //  $c_.units_holder.css('pointer-events', 'auto');
-        // }
-        // else {
-        //  $c_.units_holder.css('pointer-events', 'none');
-        // }
     };
 
     var isloadUnitsCompleted_ = false;
@@ -4999,7 +4885,7 @@ var sensolator = (function(app){
     };
 
     /**
-     * Load units & assing unit event listeners
+     * Load units & assign unit event listeners
      * @private
      * @param  {Function} callback [description]
      */
@@ -5012,7 +4898,6 @@ var sensolator = (function(app){
             listWithSensors = [];
 
         if (!list || !list.length) {
-            // app.core.errorMessage(null, app.lang.warnings.no_units);
             ko.applyBindings(sensolator);
             onLoadUnitsComplete_();
         }
@@ -5032,13 +4917,6 @@ var sensolator = (function(app){
             };
 
             for (i in list) {
-                // list[i].showOnMap = ko.observable(true);
-
-                // Don't show units with no sensors
-                // if ( !app._.keys( list[i].getSensors() ).length  ) {
-                //  continue;
-                // }
-
                 listWithSensors.push( list[i] );
 
                 uId = list[i].getId();
@@ -5211,7 +5089,6 @@ var sensolator = (function(app){
             watchSensors, // local variable, do not remove this from var
             sensor,
             sensorHistory,
-            //sensorNotifications,
             sensorsInfo = unit.getSensors(),
             sensorId,
             newValue,
@@ -5236,9 +5113,6 @@ var sensolator = (function(app){
                 (sensors[sensorId] = sensors[sensorId] % 1 ? Number((+sensors[sensorId]).toFixed(app.core.DEFAULT_FIXED_TO)) : sensors[sensorId]);
             sensorHistory = app.history.getHistoryObject(unitId, sensorId);
             sensorHistory.addItem(sensors[sensorId], eventTime);
-
-            // sensorNotifications = app.notifications.getNotificationsObject(unitId, sensorId);
-            // sensorNotifications.check(sensors[sensorId], eventTime);
         }
         sensorHistory = undefined;
 
@@ -5322,7 +5196,6 @@ var sensolator = (function(app){
                     type: sensorsInfo[sensorId].t,
                     name: sensorsInfo[sensorId].n,
 
-                    // TODO: check val && valid, and delete if no need
                     val: ko.observable(sensors[sensorId]),
                     valid: ko.observable(newValue.isValid),
                     time: ko.observable(printTime),
@@ -5332,7 +5205,6 @@ var sensolator = (function(app){
 
                     period: ko.observable(false),
                     history: app.history.getHistoryObject(unitId, sensorId),
-                    // notifications: app.notifications.getNotificationsObject(unitId, sensorId),
 
                     // gridster props
                     gridster: app.$.extend(true, {}, widgetDefaults_[DEFAULT_SENSOR_SKIN_] )
@@ -5371,7 +5243,6 @@ var sensolator = (function(app){
             if ( typeDefaults ) {
                 app.$.extend(true, watchSensors[unitId][sensorId].indicator, typeDefaults);
                 for (j in typeDefaults) {
-                    // TODO: check not created updatedIndicator fields
                     watchSensors[unitId][sensorId].updatedIndicator[j]( typeDefaults[j] );
                 }
             }
@@ -5407,7 +5278,6 @@ var sensolator = (function(app){
             }
             // If sensor props popup
             else {
-                // currentSensor.val = watchSensors[unitId][currentSensor.sId].indicator.val;
                 indicatorOptions = app.$.extend(true, {}, currentSensor.indicator);
                 for (i in currentSensor.updatedIndicator) {
                     if ( ko.isObservable(currentSensor.updatedIndicator[i]) ) {
@@ -5471,7 +5341,7 @@ var sensolator = (function(app){
     };
 
     /**
-     * Event handler for update everty counter
+     * Event handler for update every counter
      * @param  {object} event Event data object
      */
     var updateWatchCounter_ = function updateWatchCounter_(event) {
@@ -5553,7 +5423,6 @@ var sensolator = (function(app){
                                 min: DEFAULT_SENSOR_MIN_,
                                 max: DEFAULT_SENSOR_MAX_,
                                 fit: DEFAULT_SENSOR_FIT_,
-                                // valid: newValue.isValid,
                                 name: app.lang.counters[type],
                                 metrics: metrics[type],
                                 show_unit_name: DEFAULT_SENSOR_SHOW_UNIT_NAME_,
@@ -5695,18 +5564,6 @@ var sensolator = (function(app){
                 // calculate time from messages params
                 tmpMsg.t = getSensorMsgParamsChangeTime(unit, sensor);
 
-                // add params from last message
-                // UNCOMMENT AFTER HOSTING FIX (ask shmi or deal)
-                // for (var param in lastMessage.p) {
-                //     if (param in tmpMsg.p && tmpMsg.p[param] != lastMessage.p[param]) {
-                //         tmpMsg.p[param] = lastMessage.p[param];
-                //
-                //         if (tmpMsg.t < lastMessage.t) {
-                //             tmpMsg.t = lastMessage.t;
-                //         }
-                //     }
-                // }
-
                 if (typeof msgParams.posinfo !== 'undefined') {
                     if (typeof msgParams.posinfo.v !== 'undefined') {
                         tmpMsg.pos = msgParams.posinfo.v;
@@ -5763,7 +5620,6 @@ var sensolator = (function(app){
     /**
      * Get unit custom & admin fields
      * @private
-     * TODO: add eventListener on update custom field
      * @param  {object} unit wialon object source
      * @return {array}  array of objects to print fields
      */
@@ -5829,12 +5685,7 @@ var sensolator = (function(app){
         if ( sensorHistoryData.data.length ) {
             app.units.sensorInfoGraph = new Rickshaw.Graph({
                 element: $sensorInfoGraph[0],
-                // width: $sensorInfoGraph.width(),
-                // height: $sensorInfoGraph.height(),
-                // min: sensorHistoryData.min,
-                // max: sensorHistoryData.max,
                 min: 'auto',
-                // max: 'auto',
                 padding: {
                     top: 0.2
                 },
@@ -5849,7 +5700,6 @@ var sensolator = (function(app){
                     {
                         color: 'steelblue',
                         stroke: 'rgba(0,0,0.15,0)',
-                        // name: '',
                         data: sensorHistoryData.data,
                         maxDataPoints: 3
                     }
@@ -5918,12 +5768,6 @@ var sensolator = (function(app){
                     return formattedY;
                 }
             });
-/*
-            var annotator = new Rickshaw.Graph.Annotate( {
-                graph: graph,
-                element: document.getElementById('timeline')
-            } );
-*/
         }
     };
 
@@ -5937,7 +5781,7 @@ var sensolator = (function(app){
             return false;
         }
         else {
-            // Add data & draw immidiately
+            // Add data & draw immediately
             sensorInfoLogTable_.fnClearTable();
             sensorInfoLogTable_.fnAddData(
                 app.units.currentSensor().history.eViolationsArr,
@@ -5967,8 +5811,6 @@ var sensolator = (function(app){
             }
             app.units.sensorInfoGraph.update();
         }
-
-        // drawUnitSensorInfoGraph_();
 
         sensorInfoDrawLogTable_();
 
@@ -6199,13 +6041,10 @@ var sensolator = (function(app){
 
         app.gridster = app.core.$c.grid_cont.gridster({
             widget_selector: GRID_ELEM,
-            // widget_base_dimensions: [103, 95],
             widget_base_dimensions: [16, 16],
             widget_margins: [0, 0],
-            // min_rows: 1,
             min_rows: rows,
             min_cols: cols,
-            // min_cols: 1,
             autogenerate_stylesheet: false,
             avoid_overlapped_widgets: false,
             helper: 'clone',
@@ -6270,7 +6109,6 @@ var sensolator = (function(app){
         app.core.$c.grid_cont.on(
             {
                 'mousedown.sensolator': app.units.handlersBtns
-                // 'mousedown.sensolator': $.noop
             },
             WIDGET_SENSOR + ' .' + WIDGET_BTN_DELETE + ',' +
             WIDGET_SENSOR + ' .' + WIDGET_BTN_OPTIONS + ',' +
@@ -6342,7 +6180,6 @@ var sensolator = (function(app){
 
                 var options = {
                     html: true,
-                    // title: '',
                     template:   '<div class="popover"> \
                                     <div class="arrow"></div> \
                                     <div class="popover-title"> \
@@ -6439,7 +6276,6 @@ var sensolator = (function(app){
                 $c_.sensor_props.find('.panel-collapse.in').collapse('hide');
 
                 // Open unit window
-                // TODO: mb complete this
                 if ( app.units.backToUnit ) {
                     app.units.unitWindowShow( app.units.backToUnit );
                     app.units.recalcLastMessage( app.units.backToUnit );
@@ -6500,14 +6336,12 @@ var sensolator = (function(app){
             aoColumns: [
                 {
                     mData: 'time',
-                    // sClass: 'n-time',
                     mRender: function(data, type, full) {
                         return '<div class="n-time">' + app.wialon.util.DateTime.formatTime(data, 2, app.user.currentUserDateTimeFormat) + '</div>';
                     }
                 },
                 {
                     mData: 'val',
-                    // sClass: 'n-val',
                     mRender: function(data, type, full) {
                         return '<div class="n-val">' + ((data === app.wialon.item.MUnitSensor.invalidValue) ? app.lang.sensor.invalid_value : data ) + '</div>';
                     }
@@ -6615,10 +6449,6 @@ var sensolator = (function(app){
 
         if (currentDesktop.background.type() === 'map') {
             app.map.panToUnit(unit);
-
-            // if ( !unit.showOnMap() ) {
-            //  app.units.toggleUnitOnMap(unit);
-            // }
         }
         else {
             app.units.unitWindowShow(unit);
@@ -6835,7 +6665,6 @@ var sensolator = (function(app){
                             }
                         };
 
-                        // var pos = self.getPosition();
                         var pos = {x:'', y:''};
 
                         if(data.c === 'send_position'){
@@ -6873,8 +6702,6 @@ var sensolator = (function(app){
             }());
 
             var _exec = function(cmd, pos, hide, hideCommands){
-                // this need for register custom event
-                // var position = pos || {x: 0, y: 0};
                 // Sending command
                 self.remoteCommand(cmd.n, cmd.l, cmd.p, cmd.f,
                     function(code){ // execute command callback
@@ -6886,14 +6713,6 @@ var sensolator = (function(app){
                                 $c_.unit_commands.modal('hide');
 
                             app.notify.add(app.langs.translate('exec-command-success'), true, 'success');
-
-                            // register custom event
-                            // var session = wialon.core.Session.getInstance();
-                            // var cmd = unit.getCommandDefinition(command_id);
-
-                            // var cm = _.findWhere(list_cmds, {n:cmd.n}) || {};
-                            // var desc = 'Unit: '+ self.getName() +' Command "' + cmd.n + '", phone: ' + getPnoneNumber(self, cmd.f) + ', type: ' + cm.t;
-                            // self.registryCustomEvent(sss.getServerTime(), desc, (position.x || 0), (position.y || 0), 0, function(code){});
                         }
                 });
             };
@@ -7248,14 +7067,10 @@ var sensolator = (function(app){
      * Clear desktop gridster widgets panel
      */
     app.units.clearWatchItemsPanel = function clearWatchItemsPanel() {
-            // unitsList = app.units.list();
-
         app.units.updateGridsterPositionModel();
 
         app.units.watchSensors = {};
         app.units.watchCounters = {};
-
-        // app.units.recalcAllUnits();
 
         app.gridster.remove_all_widgets();
     };
@@ -7391,7 +7206,6 @@ var sensolator = (function(app){
 
         currentSensor.updatedIndicator.skin(skin);
 
-        // TODO: think about refactoring it
         // no need to update value
         delete currentSensor.updatedIndicator.val;
         delete currentSensor.updatedIndicator.valid;
@@ -7407,8 +7221,6 @@ var sensolator = (function(app){
         if ( app.units.makeSettingsDefaults() ) {
             app.units.makeSettingsDefaults(false);
         }
-
-        // app.units.recalcLastMessage( app.units.sensorsPanelUnit() );
     };
 
     /**
@@ -7423,7 +7235,6 @@ var sensolator = (function(app){
             return;
         }
 
-        // TODO: think about refactoring it
         // no need to update value
         delete currentSensor.updatedIndicator.val;
         delete currentSensor.updatedIndicator.valid;
@@ -7835,13 +7646,13 @@ var sensolator = (function(app){
         applySensorDefaults_([sensor.type]);
     };
 
-    // TODO: this is temp example code
+    // Change sensor widget background image
     app.units.sensorWindowChangeBGImage = function sensorWindowChangeBGImage(scope, event) {
         var
             sensorCounter = app.units.currentSensor(),
             $target = app.$(event.target);
 
-        // Don't update backgroud if there are incorrect URL
+        // Don't update background if there are incorrect URL
         if ( $target.hasClass('invalid') || $target.val().length < 3 ) {
             return;
         }
@@ -8029,11 +7840,6 @@ var sensolator = (function(app){
             return false;
         }
 
-        // if (period === oldPeriod) {
-        //  event && event.stopImmediatePropagation() && event.preventDefault();
-        //  return false;
-        // }
-
         currentSensor.history.changePeriod(
             period,
             // onChangePeriod
@@ -8190,16 +7996,7 @@ var sensolator = (function(app){
 
 					if ( rawImageData && rawImageData !== 'none' && backgroundURLCachedImages_[rawImageData].img) {
 						$c_.bg_holder.css('background-image', 'url("' + rawImageData + '")');
-						// $c_.bg_holder.css('background-size', 'cover');
 					}
-					// OLD WAY WITHOUT URL
-					// else {
-					// 	if (currentDesktop.backgroundInactive.image.value) {
-					// 		$c_.bg_holder.css('background-image', currentDesktop.backgroundInactive.image.value);
-					// 	}
-					// 	// See app.core.init method for loading file data
-					// 	$c_.desktop_select_file.click();
-					// }
 					$c_.bg_holder.addClass(desktopBackgroundTypes_.image.class);
 				},
 				destroy: function() {
@@ -8229,7 +8026,6 @@ var sensolator = (function(app){
 		};
 
 	var serializeDesktopDataClean_ = (function(){
-		// TODO: use it to compare indicator with widget defatuls
 		var comparator = function (srcObj, tmplObj) {
 			var
 				i;
@@ -8262,7 +8058,6 @@ var sensolator = (function(app){
 						widget = desktopData[ types[i] ][uId][sId];
 						if (!widget.onDesktop) {
 							delete widget.gridster;
-							// TODO: add more checks & cleanups
 						}
 					}
 				}
@@ -8820,35 +8615,6 @@ var sensolator = (function(app){
 
 		widgetRemoteURLTmpl_ = app.$(GRIDSTER_ELEMENT_REMOTE_URL_TMPL_).html();
 
-		// Select file for desktop background OLD WAY WITHOUT URL
-		// TODO: delete this
-		// $c_.desktop_select_file.change(function(event){
-		// 	var
-		// 		self = this,
-		// 		file = event.target.files[0],
-		// 		reader = new FileReader();
-
-		// 	if (file && file.type.match('image.*') ) {
-		// 		reader.onload = (function(file){
-		//					return function(e) {
-		//						var
-		//							rawBgImgStyle = 'url(' + e.target.result +')';
-
-		// 					app.desktops.listById[ app.desktops.currentId() ].background.value( rawBgImgStyle );
-		// 					$c_.bg_holder.css({
-		//					'background-image': rawBgImgStyle
-		//					});
-
-		//           // app.core.appStateSave();
-
-
-		//         }
-		//     })(file);
-
-		//     reader.readAsDataURL(file);
-		// 	}
-		// });
-
 		// Select background url for desktop: Open/Hide
 		$c_.background_url_modal
 			// Focus on first input when popup is shown
@@ -9108,7 +8874,6 @@ var sensolator = (function(app){
 							gridster: app.utils.extendKo({}, sensor.gridster),
 							indicator: app.utils.extendKo({}, diff.data),
 							onDesktop: sensor.onDesktop
-							// period: ko.isObservable(sensor.period) ? sensor.period() : sensor.period
 						};
 
 						delete res.listById[desktopId][ types[i] ][uId][sId].gridster.controls;
@@ -9273,7 +9038,6 @@ var sensolator = (function(app){
 	 */
 	app.desktops.unserialize = function unserialize(moduleState) {
 		var
-			// units = app.units.list(),
 			preloadingImgs = {},
 			desktopImgURL,
 			desktopId,
@@ -9354,10 +9118,6 @@ var sensolator = (function(app){
 		}
 
 		app.desktops.currentId(currentId);
-
-		// if ( app.desktops.listById[currentId].background.type() !== 'image' ) {
-		// 	desktopBackgroundTypes_[ app.desktops.listById[currentId].background.type() ].init();
-		// }
 	};
 
 	/**
@@ -9418,7 +9178,7 @@ var sensolator = (function(app){
 
 	/**
 	 * Copy desktop
-	 * @param  {int]} desktopId source desktop Id to copy
+	 * @param  {int} desktopId source desktop Id to copy
 	 */
 	app.desktops.copyDesktop = function copyDesktop(desktopId) {
 		var	newDesktopId;
@@ -9512,7 +9272,7 @@ var sensolator = (function(app){
 	};
 
 	/**
-	 * Delete desktop and all asociated data
+	 * Delete desktop and all associated data
 	 * @param  {int} desktopId Desktop ID to be deleted
 	 */
 	app.desktops.deleteDesktop = function deleteDesktop(desktopId) {
@@ -9524,8 +9284,6 @@ var sensolator = (function(app){
 			desktopImgURL;
 
 		if (length_ <= 1) {
-			// alert( app.lang.warnings.cant_delete_the_only_one_desktop );
-
 			return false;
 		}
 
@@ -9565,12 +9323,6 @@ var sensolator = (function(app){
 		});
 
 		--length_;
-
-		// Update desktop print names
-		// for (i in app.desktops.list() ) {
-		// 	app.desktops.list()[i].printName(j);
-		// 	++j;
-		// }
 
 		app.desktops.fixDesktopsListWidth();
 
@@ -9782,9 +9534,7 @@ var sensolator = (function(app){
 		else {
 			app.desktops.listById[ app.desktops.currentId() ].background.value(undefined);
 			app.desktops.changeBackground('color');
-			// desktopBackgroundTypes_.image.destroy();
 			$c_.background_url_modal.modal('hide');
-			// app.core.appStateSave();
 		}
 	};
 
@@ -9815,7 +9565,7 @@ var sensolator = (function(app){
 	return app;
 })(sensolator || {});
 
-// Sensolator utils module
+// Sensolator notify module
 var sensolator = (function(app){
 	'use strict';
 
@@ -9831,11 +9581,6 @@ var sensolator = (function(app){
 		var _init = function(){
 			$notifyBox = $('<div class="mynotify"></div>');
 			$('body').append($notifyBox);
-
-			// for test
-			// o.add('test');
-			// o.add('Success noti', null, 'success');
-			// o.add('Error noti', null, 'error');
 		};
 
 		var o = {
@@ -9892,7 +9637,7 @@ var sensolator = (function(app) {
 
 	app.reports = app.reports || {};
 
-	app.reports.template_list = []; //ko.observableArray([]);
+	app.reports.template_list = [];
 	app.reports.template_type = {};
 	app.reports.rows_count = 50;
 	app.reports.units_groups_list = [];
@@ -9905,9 +9650,7 @@ var sensolator = (function(app) {
 	//***************************
 
 	/**
-	 * Extend object containing knockout.js fields, recursive
-	 * @param {object} target An object that will receive the new properties or receive updated values
-	 * @return {object} target object
+	 * Load report templates from the resources available to the user
 	 */
 	app.reports.loadReportTemplates = function loadReportTemplates() {
 		app.wialon.core.Session.getInstance().loadLibrary("resourceReports");
@@ -9945,7 +9688,6 @@ var sensolator = (function(app) {
 							}
 						}
 						wialon.util.Helper.sortItems(app.reports.template_list, function(a) {return a.n;});
-						// ko.applyBindings(sensolator);
 					}
 				}
 
@@ -9969,20 +9711,7 @@ var sensolator = (function(app) {
 		}
 
 	};
-	// app.reports.fillTemplateSelect = function fillTemplateSelect(){
-	// 	var html = '';
-	// 	for( template in this.template_list){
-	// 		html += "<option value="text: _.unescape( template.n ), value: template.resource_id+'_'+template.id"></option>"
-	// 	}
-	// 	//<option data-bind="text: _.unescape( template.n ), value: template.resource_id+'_'+template.id"></option>
-	// };
 
-	/**
-	 * Init desktops DOM elements, called in core.startApp
-	 */
-	//app.desktops.initDOM = function initDOM() {};
-	//
-	//
 	app.reports.getTimezoneDiff = function getTimezoneDiff( userZone ) {
 		var	tt = new Date(),
 			jan1 = new Date( tt.getFullYear(), 0, 1, 0, 0, 0, 0 ),
@@ -10004,9 +9733,8 @@ var sensolator = (function(app) {
 		// unused this case but don't delete
 		if ( userZone ) {
 			return userTimezone;
-		// return wialon.util.DateTime.getTimezoneOffset();// + Math.floor( daylightTimeOffset * 3.6e3 );
 		}
-		// return locat gmt
+		// return local gmt
 		return Math.floor( daylightTimeOffset * 3.6e3 ) * -1;
 	};
 	app.reports.getBeginningOfDay = function getBeginningOfDay(time) {
@@ -10051,7 +9779,7 @@ var sensolator = (function(app) {
 	};
 	/**
 	 * Init handler on wialon loaded event
-	 * here it loads report tempaltes
+	 * here it loads report templates
 	 */
 	app.reports.initOnWialonLoaded = function initOnWialonLoaded() {
 		var mod = ReportResultTable;
@@ -10257,8 +9985,6 @@ var sensolator = (function(app) {
 			};
 		switch (jQuery('#interval').val()) {
 			case "today":
-				// interval = wialon.util.DateTime.calculateInterval(from, to, 0x01);
-				// interval.flags = 16777216;//0x00;
 				interval.flags = wialon.util.DateTime.calculateFlags(0, app.reports.fdow);
 				break;
 			case "yesterday":
@@ -10278,46 +10004,10 @@ var sensolator = (function(app) {
 				interval.to = 1;
 				break;
 			case "custom":
-				// interval = wialon.util.DateTime.calculateInterval(from, to, 0x01);
-				// interval.flags = 16777216;//0x00;
 				interval.flags = wialon.util.DateTime.calculateFlags(0, app.reports.fdow);
 				break;
 		}
 
-/*
-		var mod_usl = WebCMS.get_module("user_settings_locale");
-		if (!mod_usl)
-			return;
-		var obj = new Object();
-		obj.flags = parseInt(jQuery("#interval_type_" + id).val());
-		obj.from = jQuery("#time_from_" + id).getDateTimeAbs();
-		obj.to = jQuery("#time_to_" + id).getDateTimeAbs() + 59;
-		if (obj.flags == 0x01) {
-			var flags = wialon.util.DateTime.calculateFlags(obj.flags, mod_usl.fdow);
-			obj.to = obj.from;
-			obj = wialon.util.DateTime.calculateInterval(obj.from,obj.to,obj.flags);
-			obj.flags = flags;
-		} else if (obj.flags == 0x02) {
-			var curr = jQuery("#include_current_time" + id).prop("checked")  ? 32 : 0;
-			var flags = parseInt(jQuery("#last_type_" + id).val()) + curr;
-			flags = wialon.util.DateTime.calculateFlags(flags,mod_usl.fdow);
-			obj.from = 0;
-			var mod_nc = WebCMS.get_module("num_counter");
-			if (mod_nc)
-				obj.to = mod_nc.get_value("prev_val_" + id);
-			if (this.report_intervals && typeof this.report_intervals[id] != "undefined" && !this.report_intervals[id].skip_convert)
-				obj = wialon.util.DateTime.calculateInterval(obj.from,obj.to,flags);
-			obj.flags = flags;
-		} else
-			obj.flags = wialon.util.DateTime.calculateFlags(obj.flags, mod_usl.fdow);
-		return obj;
-*/
-
-		// var interval = {
-		// 	from: from - sensolator.reports.getTimezoneDiff(1),
-		// 	to: to - sensolator.reports.getTimezoneDiff(1)+59,
-		// 	flags: flags
-		// };
 		var rep_sel = jQuery("#report_template").val();
 		if(!rep_sel) {
 			sensolator.reports.closeReport();
@@ -10410,7 +10100,7 @@ var ReportResultTable = {
 	last_img_src: "./img/report/last.png",
 	prev_img_src: "./img/report/prev.png",
 	first_img_src: "./img/report/first.png",
-	globe_img_src: "./img/report/globe.png", //
+	globe_img_src: "./img/report/globe.png",
 	hide_img_url: "./img/report/level_minus.png",
 	show_img_url: "./img/report/level_plus.png",
 	none_img_url: "./img/report/none.png",
@@ -10551,12 +10241,12 @@ var ReportResultTable = {
 		mod.charts = {};
 		mod.report_result = result;
 		jQuery("#report_result_photos_per_page").val(mod.photos_per_page[0]);
-		//peform callback
+		//perform callback
 		if (typeof mod.callback_func === "function") {
 			mod.callback_func(result);
 		}
 	},
-	/// Error calback
+	/// Error callback
 	show_error: function(msg) {
 		if (msg) {
 			sensolator.reports.closeReport();
@@ -10759,10 +10449,9 @@ var ReportResultTable = {
 
 			jQuery("#report_result_chart_result").chart({
 				report_result: this.report_result,
-				attach_id: attach_id, //report attament index
+				attach_id: attach_id, //report attachment index
 				on_loadimg: function() {
 					ReportResultTable.wait();
-					// ReportResultTable.resize();
 				},
 				height: h,
 				translation: sensolator.lang,
@@ -10790,11 +10479,9 @@ var ReportResultTable = {
 					if (rows[id[i]].r.length - 1 !== parseInt(id[i + 1], 10)) {
 						html += "<img src='" + this.vline_img_url + "' class='vline'/>";
 					}
-					//!rows.length - 1 == parseInt(id[i]))
 					else {
 						html += "<img src='" + this.none13_img_url + "'/>";
 					}
-				//else
 				} else {
 					if (rows[id[i]].r.length - 1 !== parseInt(id[i + 1], 10)) {
 						html += "<img src='" + this.tline_img_url + "' class='tline'/>";
@@ -11056,14 +10743,13 @@ var ReportResultTable = {
 		}
 		jQuery("#report_result_toolbar_page").val(curr_page + 1);
 		jQuery("#report_result_toolbar_pages").html(sensolator.lang.pages_descr.replace(/\{total\}/g, total_pages));
-		var input_toolbar_page_width = 7 * String(total_pages).length + 12; //formula for calculation input width by riel
+		var input_toolbar_page_width = 7 * String(total_pages).length + 12; // formula for calculating the input width
 		jQuery("#report_result_toolbar_page").width(input_toolbar_page_width).css('text-align', 'center');
 		jQuery("#report_result_toolbar_messages").html(sensolator.lang.msgs_descr.replace(/\{from\}/g, (msg_from + 1)).replace(/\{to\}/g, msg_to).replace(/\{total\}/g, table.rows_count));
 		jQuery("#report_result_msgs_per_page").val(table.msgs_per_page);
 		//resize table
 		this.resize();
 	},
-	/// Hide row trip
 	/// Set count of messages for display on one page
 	change_msg_per_page: function(count) {
 		if (!this.current_table)
@@ -11110,7 +10796,7 @@ var ReportResultTable = {
 	/// Application initialized event handler
 	on_init: function() {
 		jQuery("#report_result_target").addClass("report-result-target");
-		//Create html contanier for header toolbars
+		//Create html container for header toolbars
 		var html = "";
 
 		html += "<div id='report_result_toolbars_container'>";
@@ -11118,7 +10804,7 @@ var ReportResultTable = {
 		html += "<div id='report_result_chart_toolbar'><div id=chart_toolbar_container></div></div>";
 		html += "<div id='report_result_photo_toolbar'><div id=photo_toolbar_container></div></div>";
 		html += "</div>";
-		//Create report result contanier
+		//Create report result container
 		html += "<div class='report-result-target-table'>";
 		html += "<div id='report_result_header'></div>";
 		html += "<div id='report_result_footer'></div>";
@@ -11147,15 +10833,13 @@ var ReportResultTable = {
 	/// Do resize proc
 	resize: function() {
 
-		// var h = ;
 		var w = jQuery("#report_result_chart_result").width();
 
 		//if chart else image
 		if (jQuery("#report_result_chart").css("display") !== "none") {
 			clearTimeout(this.resizeTimer);
-			// h-=10;
 			this.resizeTimer = setTimeout(function() {
-				jQuery("#report_result_chart_result").chartResize({ /*height: h, width: w, calc_height: 1,*/
+				jQuery("#report_result_chart_result").chartResize({
 					chart_height: jQuery("#report_result_chart_result").outerHeight(),
 					chart_width: jQuery("#report_result_chart_result").width()
 				});
@@ -11213,20 +10897,10 @@ var ReportResultTable = {
 		html += "<img id='report_result_toolbar_last' type='3' src='" + this.last_img_src + "'/>";
 		html += "</div></div>";
 		jQuery("#report_result_toolbar").html(html);
-		//bing events
+		//bind events
 		jQuery("#report_result_msgs_per_page").change(function() {
 			ReportResultTable.change_msg_per_page(parseInt(jQuery(this).val(), 10));
 		});
-		// jQuery('.vertical-scroll').scroll(function() {
-		// 	if(jQuery('.vertical-scroll').scrollTop() + jQuery('.vertical-scroll').height() == jQuery('#report_result_body').height()) {
-		// 		var mod = ReportResultTable;
-		// 		var table = mod.current_table;
-		// 		var msg_from = table.msg_from + table.msgs_per_page;
-		// 		if (msg_from >= table.rows_count)
-		// 			return; //msg_from = 0;
-		// 		mod.show_table(mod.current_table_index, msg_from, msg_from + table.msgs_per_page - 1, 0, true);
-		// 	}
-		// });
 		jQuery("#report_result_toolbar_table img").click(function() {
 			var mod = ReportResultTable,
 					msg_from;
@@ -11246,7 +10920,7 @@ var ReportResultTable = {
 			} else if (type === 2) { //next page
 				msg_from = table.msg_from + table.msgs_per_page;
 				if (msg_from >= table.rows_count)
-					return; //msg_from = 0;
+					return;
 				mod.show_table(mod.current_table_index, msg_from, msg_from + table.msgs_per_page - 1);
 			} else if (type === 3) { //last page
 				msg_from = table.rows_count % table.msgs_per_page ? parseInt(table.rows_count / table.msgs_per_page, 10) * table.msgs_per_page : (parseInt(table.rows_count / table.msgs_per_page, 10) - 1) * table.msgs_per_page;

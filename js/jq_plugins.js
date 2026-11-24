@@ -4175,13 +4175,13 @@
 'use strict';
 /**
  * JQuery Indicator plugin, (C) Gurtam.com, 2014
- * @author Vitaly Makarevich
+ * @author Gurtam
  * Required: underscore, d3, rickshaw, wialon
  *
  * Init/Update:
  * $('#container').indicator(Object: options)
  *
- * Preload needed indicator skins (can run immidiately after
+ * Preload needed indicator skins (can run immediately after
  * this file loaded, no need wait document.ready):
  * $.indicator.init(Object: init_options)
  * init_options.skins = ['needed_skin1', 'needed_skin2', ...]
@@ -4334,7 +4334,7 @@
 
 			// if current skin is equal to "text_simple_custom"
 			if (data.skin === 'text_simple_custom') {
-                // availabiility to change color for value
+                // availability to change color for value
                 if (data.color_1) {
                     $text.css('fill', data.color_1);
                 }
@@ -4345,7 +4345,7 @@
                         .attr('y', textCenter)
                         .css('dominant-baseline', 'central');
 
-                    // availabiility to fit all widget
+                    // availability to fit all widget
                     if (data.fit) {
                         return _.defer(function(){ fitSVGText( $text, 1 ) });
                     }
@@ -4801,7 +4801,6 @@
                             oldData.min !== data.min ||
                             oldData.max !== data.max ||
                             !_.isEqual(oldData.scheme, data.scheme)) {
-                            // TODO: Check scheme
                             // Update value & settings
                             svg.options.name = data.name;
                             svg.options.min = data.min;
@@ -4889,12 +4888,10 @@
 				url: self.tmpl.url,
 				dataType: 'text',
 				type: 'GET',
-				//error: function (jqXHR, textStatus, errorThrown) {},
 				success: function (data, textStatus, jqXHR) {
 					self.tmpl.data = data;
 					self.initialized = true;
 				},
-				//complete: function (jqXHR, textStatus) {}
 			});
 		},
 		render: function(){
@@ -5002,7 +4999,6 @@
 
 			res = data.val;
 
-			// TODO: refactor it
 			res = sensolator.units.getSensorCounterValueWithMetricsToPrint(
 				res,
 				data.metrics,
@@ -5013,9 +5009,9 @@
 		},
 
 		/**
-		 * Toogle X and Y axes for rickshaw graph
+		 * Toggle X and Y axes for rickshaw graph
 		 * @param  {object} $item jQuery graph container DOM object
-		 * @param  {?boolean} state state to swith to
+		 * @param  {?boolean} state state to switch to
 		 */
 		graphTogleAxes = function($item, state) {
 			var
@@ -5039,7 +5035,7 @@
 						pixelsPerTick: 80,
 						ticks: 2,
 						tickFormat: function(timestamp) {
-							return sensolator.wialon.util.DateTime.formatTime(timestamp, 2, sensolator.user.currentUserTimeFormat); // , 'HH:mm'
+							return sensolator.wialon.util.DateTime.formatTime(timestamp, 2, sensolator.user.currentUserTimeFormat);
 						}
 					});
 					$item.hasClass(GRAPH_CLASS_NO_X) && $item.removeClass(GRAPH_CLASS_NO_X);
@@ -5468,8 +5464,6 @@
 				'tmpl/horizontal_bar.svg',
 				function ($elements) {
 					var
-						// DASH_INACTIVE_COLOR = '#3D3F46',
-						// DASH_INACTIVE_CLASS = 'fil_inactive',
 						SENSOR_NAME_MAX_WIDTH = 5000,
 						SENSOR_VAL_MAX_WIDTH = 13000,
 						LINE_Y = 2291,
@@ -5943,7 +5937,6 @@
 						data = $element.data(indicator);
 
 						$existedElement = $element.find(SVG_INDICATOR_BODY);
-						// elInitialized = $inner_svg.length ? true : false;
 						$item = $existedElement.length ? $existedElement : $(self.tmpl.data);
 
 						printIndicatorUnitName_(data, $element);

@@ -1,5 +1,8 @@
 <!doctype html>
-<html class="no-js">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -19,9 +22,40 @@
 		var documentationLink=null;
 		var is_white=null;
 		var APP_CONFIG = {};
+
+
+		fetch("/sensolator/app/app.json")
+			.then((response) => response.ok && response.json())
+			.then((data) => {
+				is_white = false;
+				document.title = decodeURIComponent(data.title || "Sensolator");
+				availableLanguages = data.language || null;
+			})
+		.then(() => {
+			fetch("/sensolator/whitelabel.json")
+				.then((response) => response.ok && response.json())
+				.then((data) => {
+					if (data.hasOwnProperty('IS_WHITELABEL')) {
+						is_white = data.IS_WHITELABEL === false ? false : true;
+					}
+					if (data.hasOwnProperty('alias')) {
+					document.title = decodeURIComponent(data.alias) || "Sensolator";
+					}
+					if (data.hasOwnProperty('help_url_link')) {
+						documentationLink=data.help_url_link;
+					}
+					APP_CONFIG = data;
+				})
+				.catch(() => {
+					console.log('Error loading app.json');
+				});
+		});
 	</script>
 </head>
 <body data-bind="event: {keydown: $root.desktops.onKeyDown}">
+<!--[if lt IE 10]>
+		<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
 <div style="position:absolute;width:0;height:0">
 <svg>
 <defs>
@@ -162,7 +196,6 @@
 					</div>
 				</div>
 				<ul class="dropdown-menu" id="map-tiles-holder" role="menu" aria-labelledby="desktopMap">
-					<!-- <li><a role="menuitem" class="btn map-tiles" data-bind="css: {disabled: $root.desktops.current().background.type() === 'map' && $root.desktops.current().background.value() && $root.desktops.current().background.value().tileType == 'osm'}, click: function(){ $root.desktops.changeBackground('map', {tileType: 'osm'}) }" data-localize="openstreetmap"></a></li> -->
 					<li><a role="menuitem" class="btn map-tiles" data-bind="css: {disabled: $root.desktops.current().background.type() === 'map' && $root.desktops.current().background.value() && $root.desktops.current().background.value().tileType == 'gurtam'}, click: function(){ $root.desktops.changeBackground('map', {tileType: 'gurtam'}) }" data-localize="gurtam_maps"></a></li>
 				</ul>
 			</div>
@@ -177,16 +210,6 @@
 		</div>
 	</div>
 
-	<!-- <div>
-			<span data-localize="all_units"></span>
-			<input type="text" name="search_units">
-	</div>-->
-	<!-- <button id="search_sensors" type="button" class="btn btn-default" data-toggle="button" data-localize="all_sensors" data-bind=""></button> -->
-	<!--<div id="search_sensors" data-localize="all_sensors">
-			<span data-localize="all_sensors"></span>
-			<input type="text" name="search_sensors">
-	</div>
-	-->
 	<div class="left_panel">
 		<button id="search_units" type="button" class="search_btn" data-localize="all_units" data-bind="css: {visible: $root.units.list().length, collapsed: !$root.units.listVisible()}, click: function(){ $root.units.listVisible( !$root.units.listVisible() ) }"></button>
 		<div id="units" style="display:none" class="no-select" data-bind="visible: $root.units.list().length && $root.units.listVisible">
@@ -199,33 +222,6 @@
 					</tr>
 				</tbody>
 			</table>
-
-			<!--<table id="units_table" class="table table-condensed"
-					data-bind="dataTable: {
-				dataSource: units.list,
-				rowTemplate: 'addressGridTemplate',
-				iDisplayLength: 1,
-				sPaginationType: 'bootstrap',
-				gridId: 'units_table_grid',
-				sDom: 't<\'row\'<\'span12\'i><\'span12 paginateRight\'p>>',
-				columns:
-				[
-					 {'name':'showOnMap' }
-				]
-					}
-			">
-			<tbody>
-			</tbody>
-			</table>
-			 
-			<script id="addressGridTemplate" type="text/html">
-				<td data-bind="text: showOnMap, click: function(unit) { console.log(unit); $parent.units.toggleUnitOnMapEvent(unit); return true;"></td>
-			</script>
-
-			<td class="umapflag"><input type="checkbox" data-bind="checked: showOnMap(), click: function(unit) { $parent.units.toggleUnitOnMapEvent(unit); return true; }"></td>
-			<td class="uicon"><img data-bind="attr: {src: getIconUrl(20)}"></td>
-			<td class="uname" data-bind="text: getName(), click: function(unit) { $parent.units.focusOnUnit(unit); return true; }"></td>
-			<td class="usensors" data-bind="click: function(unit) { $parent.units.showUnitSensors(unit); return true; }" data-toggle="modal" data-target="#unit_sensors"></td>-->
 		</div>
 		<button id="search_reports" type="button" class="search_btn collapsed" style="display:none" data-localize="reports" data-bind="click: function(){ $root.reports.formToggle() }"></button>
 		<div class="reports_form" id="reports_form" style="display:none">
@@ -675,7 +671,6 @@ validate: {
 						</div>
 					</div>
 				</div>
-				<!-- <hr /> -->
 				<div class="modal-body second">
 					<div class="row">
 						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 sensor_info_log_table_container" style="display:none">
@@ -802,7 +797,6 @@ validate: {
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-localize="cancel" data-bind="click: $root.desktops.backgroundURLDontSave"></button>
 					<button type="button" id="background-url-modal-button-set" class="btn btn-success ladda-button" data-bind="click: $root.desktops.backgroundURLSet" data-style="expand-left" data-spinner-size="20" data-spinner-color="#333333">
-						<!-- <span class="ladda-label">long title</span> -->
 						<span data-localize="background_url.set"></span>
 					</button>
 				</div>

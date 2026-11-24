@@ -158,7 +158,7 @@
     "set_background_map": "Show map on background",
     "set_background_color": "Set background color",
     "set_background_image": "Set background image",
-    "sensor_visual_settings": " Additional settings:",
+    "sensor_visual_settings": "Additional settings:",
     "sensor_notification_settings": "Notification:",
     "sensor_value_and_scale_round": "Integer values",
     "show_unit_counter_properties": "Show properties",
@@ -175,7 +175,7 @@
     "save_user_settings": "OK",
     "sensor": {
         "min": "Min:",
-        "max": " Max:",
+        "max": "Max:",
         "invalid_value": "Unknown",
         "background_placeholder": "example.com/background.jpg",
         "color_scheme": "Color scheme:",
@@ -275,7 +275,7 @@
     "sensor_digital_off": "Off",
     "sensor_properties_header": "Sensor %%SENSOR%% of unit %%UNIT%%",
     "sensor_info_header": "Chart for %%SENSOR%% of unit %%UNIT%%",
-    "sensor_last_value_prefix": "Last value: ",
+    "sensor_last_value_prefix": "Last value:",
     "sensor_last_value_middle_part": " on ",
     "widget_show_unit_name": "Unit name",
     "widget_show_sensor_name": "Sensor name",
@@ -387,5 +387,5 @@
     "zoom_custom": "Custom zoom",
     "zoom_in": "Zoom in",
     "zoom_out": "Zoom out",
-    "Example name": ""
+    "Example name": "Example name"
 }

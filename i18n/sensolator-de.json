@@ -129,9 +129,9 @@
         "time": "Zeit",
         "value": "Wert",
         "email": "E-Mail",
-        "email_placeholder": "beispielname@mycarcontrol.de",
+        "email_placeholder": "beispielname@example.com",
         "phone": "Telefon",
-        "phone_placeholder": "+4940696353010"
+        "phone_placeholder": "+493023125000"
     },
     "openstreetmap": "OpenStreetMap",
     "ok": "OK",
@@ -150,7 +150,7 @@
         "add_title": "Beobachte URL",
         "edit_title": "Editiere URL",
         "url": "URL:",
-        "url_placeholder": "mycarcontrol.de/streaming/",
+        "url_placeholder": "example.com/streaming/",
         "save": "OK"
     },
     "speed": "Geschwindigkeit",
@@ -176,7 +176,7 @@
         "min": "Min:",
         "max": "Max:",
         "invalid_value": "Unbekannt",
-        "background_placeholder": "mycarcontrol.de/background.jpg",
+        "background_placeholder": "example.com/background.jpg",
         "color_scheme": "Farb-Schema:",
         "reset": "Reset",
         "remove": "Entfernen",
